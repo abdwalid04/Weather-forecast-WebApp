@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg"  width="64" height="64" viewBox="-5 -5 20 20">
+    <defs>
+        <style>.cls-1,.cls-3{fill:none;stroke-linecap:round;}.cls-1,.cls-2{stroke:orange;}.cls-1,.cls-2,.cls-3{stroke-width:0.5px;}.cls-2{fill:orange;}.cls-3{stroke:#91c0f8;stroke-linejoin:round;}</style>
+    </defs>
+    <title>icon_DMN_Fichier 21</title>
+    <g id="Calque_2" data-name="Calque 2">
+        <g id="Calque_1-2" data-name="Calque 1">
+            <g id="day">
+                <line class="cls-1" x1="6.16" y1="9.44" x2="6.16" y2="10.75"/>
+                <line class="cls-1" x1="3.35" y1="8.32" x2="2.42" y2="9.25"/>
+                <line class="cls-1" x1="2.22" y1="5.5" x2="0.91" y2="5.5"/>
+                <line class="cls-1" x1="3.35" y1="2.76" x2="2.42" y2="1.83"/>
+                <line class="cls-1" x1="6.16" y1="1.56" x2="6.16" y2="0.25"/>
+                <line class="cls-1" x1="8.92" y1="2.76" x2="9.85" y2="1.83"/>
+                <line class="cls-1" x1="10.09" y1="5.5" x2="11.41" y2="5.5"/>
+                <line class="cls-1" x1="8.92" y1="8.32" x2="9.85" y2="9.25"/>
+                <circle class="cls-2" cx="6.16" cy="5.5" r="2.19"/>
+            </g>
+            <line class="cls-3" x1="5.94" y1="4.14" x2="11.93" y2="4.14"/><line class="cls-3" x1="0.25" y1="6.77" x2="6.24" y2="6.77"/>
+        </g>
+    </g>
+</svg>

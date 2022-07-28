@@ -1,0 +1,17 @@
+{% extends "layouts/base-error.html" %}
+
+{% block title %} Erreur 404 {% endblock %} 
+
+{% block content %}
+
+    <div class="container text-center">
+        <div class="display-1 text-muted mb-5"><i class="si si-exclamation"></i> 404</div>
+        <h1 class="h2 mb-3">Oups.. Vous venez de trouver une page d'erreur..</h1>
+        <p class="h4 text-muted font-weight-normal mb-7">Nous sommes désolés mais notre service n'est pas disponible actuellement&hellip;</p>
+        <a class="btn btn-primary" href="/">
+          <i class="fe fe-arrow-left mr-2"></i>Aller à la page d'accueil
+        </a>
+    </div>
+
+{% endblock content %}
+

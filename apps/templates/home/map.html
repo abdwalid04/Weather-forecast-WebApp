@@ -1,0 +1,265 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Carte météorologique {% endblock %} 
+
+{% block content %}
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Roboto:400,300);
+        .marker {
+            background-size: cover;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .mark_inf {
+            width: 100%;
+            height: 100%;
+            color: #fff;
+            text-align: center;
+        }
+        @-webkit-keyframes open {
+            from {
+                padding: 0 30px;
+                height: 0;
+            }
+            to {
+                height: 470px;
+            }
+        }
+
+        .mark_inf h1,
+        .mark_inf h2,
+        .mark_inf h3{
+            position: relative;
+        }
+
+        .mark_inf h1 {
+            font-weight: 200;
+            font-size: 3em;
+            line-height: 1.5em;
+            margin-bottom: 0;
+        }
+
+        .mark_inf h2 {
+            width: 220px;
+            font-weight: 600;
+            font-size: 2em;
+        }
+        .mark_inf h3 {
+            line-height: 1.4em;
+            font-weight: 500;
+            font-size: 1.1em;
+            letter-spacing: 1px;
+            -webkit-animation: up .7s cubic-bezier(.39, 0, .38, 1) .1s;
+        }
+        .mark_inf .dot {
+            font-size: 1.2em;
+        }
+
+        .mark_inf .sky {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        @-webkit-keyframes up {
+            0% {
+                opacity: 0;
+                -webkit-transform: translateY(15px);
+            }
+            50% {
+                opacity: 0;
+                -webkit-transform: translateY(15px);
+            }
+            99% {
+                -webkit-animation-play-state: paused;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        .mapboxgl-popup-content{
+            background-color: rgba(0, 39, 78, 0.8);
+            border-radius: 15px;
+        }
+        .mapboxgl-popup .mapboxgl-popup-tip  {
+            border-top-color: rgba(0, 39, 78, 0.8);
+            border-bottom-color: rgba(0, 39, 78, 0.8);
+        }
+        .mapboxgl-popup-close-button {
+            display: none;
+        }
+        a.mapboxgl-ctrl-logo,
+        .mapboxgl-ctrl button .mapboxgl-ctrl-icon,
+        .mapboxgl-ctrl a {
+            display: none;
+        }
+        .week-list {
+            list-style-type: none;
+            padding: 0;
+            -webkit-box-shadow: 0 0 50px -5px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 0 50px -5px rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+            background-color: #11487e;
+        }
+
+        .week-list>li {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            float: left;
+            width: 110px;
+            height: 60px;
+            margin-left: 13.6px;
+            margin-right: 13.6px;
+            cursor: pointer;
+            -webkit-transition: 200ms ease;
+            -o-transition: 200ms ease;
+            transition: 200ms ease;
+            border-radius: 10px;
+        }
+        .week-list>li h5 {
+            margin-top: 15px;
+        }
+
+        .week-list>li:hover,.week-list>li.active {
+            -webkit-transform: scale(1.1);
+            -ms-transform: scale(1.1);
+            transform: scale(1.1);
+            background: #11487e;
+            color: #fff;
+            -webkit-box-shadow: 0 0 40px -5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 40px -5px rgba(0, 0, 0, 0.2)
+        }
+        .slider {
+            width: 100%;
+        }
+    </style>
+
+    <div class="my-3 my-md-5">
+        <div class="container">
+            <div class="card-deck">
+                <div class="col-lg-7 col-md-6">
+                    <div class="card ">
+                        <div class="card-body" style="padding: 0;">
+                            <div class="map" style="height: 720px;">
+                                <div class="map-content" id="map" style="width: 100%;height: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card  text-center justify-content-center shaodw-lg  card-1 border-0 bg-white px-sm-2 " style="height: 270px;">
+                    <div class="card-body" >
+                        <div class="slider-container">
+                            <span class="bar"><span class="fill"></span></span>
+                            <input id="ech_slider" class="slider" onchange="reloadmap()" type="range" min="3" max="24" step="3" value="3">
+                        </div>
+                        <p id="ech" style="font-size: 1.5rem;margin: 20px 0 40px 0;"><p>
+                        <ul class="week-list">
+                            <li class="active" id="date1">
+                                <h5 class="pic"></h5>
+                                <p></p>
+                            </li>
+                            <li id="date2">
+                                <h5 class="pic"></h5>
+                                <p></p>
+                            </li>
+                            <li id="date3">
+                                <h5 class="pic"></h5>
+                                <p></p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    var $slider = $(".slider");
+    var $fill = $(".bar .fill");
+    function setBar() {
+        if($slider.val()==3){
+            $fill.css("width", "0%")
+        } else {
+            $fill.css("width", ($slider.val()/24)*100 + "%");
+        }
+    }
+    $slider.on("input", setBar);
+    setBar();
+        function pad(d) {
+            return (d < 10) ? '0' + d.toString() : d.toString();
+        }
+        function getweekday(ind){
+            const weekdays = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi']
+            return weekdays[ind]
+        }
+        Date.prototype.addDays = function (days) {
+            const date = new Date(this.valueOf());
+            date.setDate(date.getDate() + days);
+            return date;
+        };
+        for (var i=1;i<4;i++) {
+            const date = new Date("{{ date }}").addDays(i-1)
+            $('#date'+i+' .pic').html(getweekday(date.getDay()))
+            $('#date'+i+' p').html(pad(date.getDate())+'/'+pad((parseInt(date.getMonth())+1)))
+        }
+        
+        reloadmap()
+        $('ul.week-list li').click(function () {
+            $('ul.week-list li.active').removeClass('active');
+            $(this).addClass('active');
+            document.getElementById("ech_slider").value=3
+            reloadmap()
+        });
+        function getech() {
+                var select_id = $('ul.week-list li.active').attr('id')
+                var day = parseInt(select_id.substr(select_id.length - 1))
+                var hour = parseInt(document.getElementById("ech_slider").value)
+                if (hour==24) {
+                    $('#ech').html('00 : 00')
+                } else {
+                    $('#ech').html(pad(hour)+' : 00')
+                }
+                return parseInt((day-1)*24+hour)
+            }
+        function reloadmap() {
+            mapboxgl.accessToken = 'pk.eyJ1Ijoid2FsaWRhYmRlbGxhaCIsImEiOiJjbDNkY3hnN3EwNGJlM2JvZnp6bXhsd2F6In0.z2mS6OeX2ehyGPgRNhplGw';
+            const bounds = [
+                [-18, 20], // Southwest coordinates
+                [-0,36.8] // Northeast coordinates
+            ];
+            $("#map").html('')
+            var map = new mapboxgl.Map({
+                container: 'map', // container ID
+                style: 'mapbox://styles/walidabdellah/cl4feejjo000614k8sn2hmj36', // style URL
+                center: [-9,29 ], // starting position [lng, lat]
+                zoom: 4.3, // starting zoom
+                maxZoom:6,
+                maxBounds: bounds
+            }); 
+            ech = getech()
+            "{% for row in data %}"
+            if("{{ row.ech }}"%24 < 18 & "{{ row.ech }}"%24 >= 6){
+                d_n = 'day'
+            } else {
+                d_n = 'night'
+            }
+            if("{{ row.ech }}"==ech){
+                var el = document.createElement('div');
+                        el.className = 'marker';
+                        el.style.backgroundImage = "url('/static/assets/images/weather_icons/"+d_n+"/{{row.nebulosite_id}}.svg')"
+                        new mapboxgl.Marker(el)
+                            .setLngLat([ "{{ row.lon }}" , "{{ row.lat }}" ])
+                            .setPopup(new mapboxgl.Popup().setHTML("<div class='mark_inf'><h2>{{row.nom}}</h2><h3>{{row.nebulosite}}</h3><h3><span>{{row.u10ff}} km/h <span class='dot'> • </span> {{row.u10ddd|upper}}</span></h3><h1>{{row.t2m}}°</h1></div>"))
+                            .addTo(map);
+            }
+            "{% endfor %}"
+        }
+    </script>
+{% endblock javascripts %}

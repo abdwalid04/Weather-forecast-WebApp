@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	width="64" height="64" viewBox="-5 -5 66 66" style="enable-background:new 0 0 64 64;" xml:space="preserve">
+<style type="text/css">
+	.st0{filter:url(#blur);}
+	.st1{fill:#FFA500;}
+	.st2{fill:#19324d;stroke:#FFFFFF;stroke-width:1.2;stroke-linejoin:round;}
+	.st3{fill:none;stroke:#19324d;stroke-width:1.2;stroke-linecap:round;}
+	.st4{fill:none;stroke:#19324d;stroke-linecap:round;}
+</style>
+<filter  height="100%" id="blur" width="100%">
+	<feGaussianBlur  in="SourceAlpha" stdDeviation="3"></feGaussianBlur>
+	<feOffset  dx="0" dy="4" result="offsetblur"></feOffset>
+	<feComponentTransfer>
+		<feFuncA  slope="0.05" type="linear"></feFuncA>
+	</feComponentTransfer>
+	<feMerge>
+		<feMergeNode></feMergeNode>
+		<feMergeNode  in="SourceGraphic"></feMergeNode>
+	</feMerge>
+</filter>
+<g id="snowy-2" class="st0">
+	<g transform="translate(20,10)">
+		<g transform="translate(16,4), scale(0.8)">
+			<g>
+				<polygon class="st1" points="2.9,4 3.4,5 4.4,5.8 3.4,6.3 2.9,7.3 2.4,6.3 1.1,5.8 2.4,5 				"/>
+			</g>
+			<g>
+				<polygon class="st1" points="20.5,13 21.3,14 22.3,14.5 21.3,15.2 20.5,16.2 20,15.2 19.1,14.5 20,14 				"/>
+			</g>
+			<g>
+				<g>
+					<path class="st1" d="M12.8,14.5c0-3.2,1.7-6.2,4.5-7.7c-1.2-0.7-2.7-1.2-4.5-1.2c-5,0-9,4-9,9s4,9,9,9c1.5,0,3.2-0.5,4.5-1.2
+						C14.6,20.7,12.8,17.7,12.8,14.5z"/>
+					<path class="st1" d="M12.8,24.4c-5.5,0-10-4.5-10-10s4.5-10,10-10c2,0,3.5,0.5,5,1.2c0.2,0.2,0.5,0.5,0.5,1
+						c0,0.5-0.2,0.7-0.5,1c-2.5,1.5-4,4-4,6.7c0,2.7,1.5,5.5,4,6.7c0.2,0.2,0.5,0.5,0.5,1c0,0.5-0.2,0.7-0.5,1
+						C16.1,24.2,14.6,24.4,12.8,24.4z M12.8,6.8c-4.2,0-7.7,3.5-7.7,7.7s3.5,7.7,7.7,7.7c0.7,0,1.5,0,2.2-0.2c-2-2-3.2-4.5-3.2-7.5
+						S13.1,9,15.1,7C14.3,6.8,13.6,6.8,12.8,6.8z"/>
+				</g>
+			</g>
+		</g>
+		<g>
+			<path class="st2" d="M27.7,24.4c0-4.6-3.7-8.2-8.2-8.2c-1,0-1.9,0.2-2.8,0.5c-0.3-3.4-3.1-6.2-6.6-6.2c-3.7,0-6.7,3-6.7,6.7
+				c0,0.8,0.2,1.6,0.4,2.3c-0.3-0.1-0.7-0.1-1-0.1c-3.7,0-6.7,3-6.7,6.7c0,3.6,2.9,6.6,6.5,6.7h17.2C24.2,32.3,27.7,28.8,27.7,24.4z
+				"/>
+		</g>
+	</g>
+	<g>
+		<g transform="translate(32,38)">
+			<line class="st4" x1="0" y1="6.5" x2="0" y2="11.5"/>
+			<line class="st4" x1="1.8" y1="7.2" x2="-1.8" y2="10.8"/>
+			<line class="st4" x1="2.5" y1="9" x2="-2.5" y2="9"/>
+			<line class="st4" x1="1.8" y1="10.8" x2="-1.8" y2="7.2"/>
+		</g>
+	</g>
+</g>
+</svg>

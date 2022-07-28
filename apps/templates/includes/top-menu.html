@@ -1,0 +1,62 @@
+
+            <div class="header collapse d-lg-flex p-0" id="headerMenuCollapse" style="background-color: #11487e;">
+                <div class="container">
+                  <div class="row align-items-center">
+                    <div class="col-lg-3 " style="flex: 0 0 0%;">
+                      <div class="dropdown">
+                        <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
+                          <span class="avatar" style="background-image: url(/static/assets/images/profile.jpg)"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                          {% if user.is_superuser %}
+                          <a class="dropdown-item" href="{% url 'register' %}">
+                            <i class="dropdown-icon fe fe-user-plus"></i> Créer un superviseur
+                          </a>
+                          {% endif %}
+                          <a class="dropdown-item" href={% url 'logout' %} >
+                            <i class="dropdown-icon fe fe-log-out" ></i> Sign out
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg order-lg-first">
+                      <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
+                        <li class="nav-item">
+                          <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"><i class="fe fe-home"></i> Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="{% url 'table' %}" class="nav-link {% if request.resolver_match.url_name == 'table' %}active{% endif %}"><i class="fa fa-table" style="margin-top: 2px;"></i>Table</a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="{% url 'validation' %}" class="nav-link {% if request.resolver_match.url_name == 'validation' %}active{% endif %}"><i class="	fa fa-check" style="margin-top: 2px;"></i>Validation</a>
+                        </li>
+                        {% if user.is_superuser %}
+                        <li class="nav-item">
+                          <a href="{% url 'upload' %}" class="nav-link {% if request.resolver_match.url_name == 'upload' %}active{% endif %}"><i class="fa fa-cloud-upload" style="margin-top: 2px;"></i>Ajouter observation</a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                          <a href="{% url 'map' %}" class="nav-link {% if request.resolver_match.url_name == 'map' %}active{% endif %}"><i class="fa fa-map" style="margin-top: 2px;"></i>Carte météorologique</a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="{% url 'model' %}" class="nav-link {% if request.resolver_match.url_name == 'model' %}active{% endif %}"><i class="fa fa-cogs" style="margin-top: 2px;"></i>Model</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <style>
+              .nav-tabs .nav-link.active{
+                color: #fff;
+                border-bottom: 3px solid #fff;
+              }
+              .nav-tabs .nav-link {
+                padding-left: 10px;
+                padding-right: 10px;
+              }
+              .nav-tabs .nav-link i {
+                margin-right: 10px;
+              }
+            </style>

@@ -1,0 +1,110 @@
+{% extends "layouts/base-fullscreen.html" %}
+
+{% block title %} Register {% endblock %} 
+
+{% block content %}
+    <style>
+      .row {
+        color: #11487e;
+      }
+      .row a {
+        color: #11487e;
+      }
+      .btn-primary {
+        background-color: #11487e;
+      }
+      #redrct_home {
+        margin-top: 10px;
+      }
+    </style>
+    <div class="row">
+      <div class="col col-login mx-auto">
+
+          <form class="card" action="" method="post">
+
+            {% csrf_token %}
+
+            <div class="card-body p-6">
+              <div class="card-title text-center">
+
+                {% if msg %}
+                  <div class="alert {% if success %}alert-success{% else %}alert-danger{% endif %} d-flex align-items-center" role="alert">
+                    {{ msg | safe }}
+                  </div>
+                {% else %}
+                  Ajoutez vos identifiants
+                {% endif %}  
+                
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Nom d'utilisateur</label>
+                {{ form.username }}
+              </div>
+              <span class="text-danger">{{ form.username.errors }}</span>
+
+              <div class="form-group">
+                <label class="form-label">Nom</label>
+                {{ form.first_name }}
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Prénom</label>
+                {{ form.last_name }}
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                {{ form.email }}
+              </div>
+              <span class="text-danger">{{ form.email.errors }}</span>
+
+              <div class="form-group">
+                <label class="form-label">
+                  Mot de passe
+                </label>
+                {{ form.password1 }}
+              </div>
+              <span class="text-danger">{{ form.password1.errors }}</span>
+
+              <div class="form-group">
+                <label class="form-label">
+                  Vérifié le mot de passe
+                </label>
+                {{ form.password2 }}
+              </div>
+              <span class="text-danger">{{ form.password2.errors }}</span>
+
+              <div class="form-footer" >
+                <button type="submit" name="register" class="btn btn-primary btn-block">S'inscrire</button>
+              </div>
+              <div class="text-center text-muted" id="redrct_home">
+                  <a href="{% url 'home' %}">Page d'accuel </a>
+              </div>
+            </div>
+
+          </form>
+        
+        <div class="text-center text-muted">
+          &copy; DGM - 
+          <a target="_blank" href="https://www.marocmeteo.ma/" >Direction generale de la météorologie</a>
+          <br />
+          Réalisé par <a target="_blank" href="https://www.linkedin.com/in/abdellah-walid-17126a20b/">ABDELLAH WALID</a>
+        </div>
+
+      </div>
+    </div>
+        
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script>
+      "{% if success %}"
+      $('#id_username').val('')
+      $('#id_first_name').val('')
+      $('#id_last_name').val('')
+      $('#id_email').val('')
+      "{% endif %}"
+    </script>
+{% endblock javascripts %}

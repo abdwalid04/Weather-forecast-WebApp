@@ -1,0 +1,313 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Ajouter observation {% endblock %} 
+
+{% block content %}
+    <style>
+        #uploader {
+            margin-top: 50px;
+        }
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.7);
+            z-index: 9999;
+            text-align: center;
+            display: none;
+        }	
+        .preloader-icon {
+            position: relative;
+            top: 40%;
+            left: 10px;
+            width: 150px;
+            border-radius: 50%;
+        }
+        #loadertext {
+            margin-top:20%;
+            font-size: 1.2rem;
+        }	
+    </style>
+    <div class="preloader"> 
+        <img class="preloader-icon" src="/static/assets/images/weather_icons/day/14.svg" alt="My Site Preloader"> 
+        <div id="loadertext" class="text-center text-muted"> Prediction encore ... </div>
+    </div>
+    <div class="my-3 my-md-5">
+        <div class="container">
+            <div id="uploader" >
+                <form action="{% url 'upload' %}" method="POST" enctype="multipart/form-data" class="form-horizontal"> 
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input upfild" name="csv_file" id="csv_file" required="True" accept=".csv">
+                            <label class="custom-file-label" for="csv_file" style="color: #11487e;">Chosir un fichier csv</label>
+                        </div>
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" id="sub_upload"  style="background-color: #11487e;">Upload</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="csvviewer" style="display: none;">
+                <button class="btn btn-primary"  id="Saveupload" style="background-color: #11487e;" >
+                    Enregistrer
+                </button>
+                <button id='cancelupload' class='btn btn-danger' >
+                    Annuler
+                </button>
+                <div id="myGrid" style="height: 600px; width: 100%" class="ag-theme-alpine" ></div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    {% if data %}
+    <script src="https://unpkg.com/ag-grid-enterprise@27.3.0/dist/ag-grid-enterprise.min.js"></script>
+    <script>
+            
+            const columnDefs = [
+            {
+                headerName: 'Observation',
+                children: [
+                { field : 'id_ville' , minWidth: 100 },
+                { field: 'ville', minWidth: 150 },
+                { field : 'lat' , minWidth: 120 , hide:true },
+                { field : 'lon' , minWidth: 120 , hide:true },
+                { field : 'date' , minWidth: 120 ,},
+                { field : 'ech' , minWidth: 100 ,},
+                { field : 't2m' , minWidth: 120 , hide:true },
+                { field : 'hu2m' , minWidth: 120 , hide:true },
+                { field : 'hu10m' , minWidth: 120 , hide:true },
+                { field : 'hu1000hpa' , minWidth: 120 },
+                { field : 'hu925hpa' , minWidth: 120 },
+                { field : 'hu850hpa' , minWidth: 120 },
+                { field : 'hu700hpa' , minWidth: 120 },
+                { field : 'hu500hpa' , minWidth: 120 },
+                { field : 'hu300hpa' , minWidth: 120 },
+                { field : 'u10ff' , minWidth: 120 , hide:true },
+                { field : 'u10dd' , minWidth: 120 , hide:true },
+                { field : 'u10ddd' , minWidth: 120 , hide:true },
+                { field : 'u20ff' , minWidth: 120 , hide:true },
+                { field : 'u20dd' , minWidth: 120 , hide:true },
+                { field : 'u20ddd' , minWidth: 120 , hide:true },
+                { field : 'u50ff' , minWidth: 120 , hide:true },
+                { field : 'u50dd' , minWidth: 120 , hide:true },
+                { field : 'u50ddd' , minWidth: 120 , hide:true },
+                { field : 'u100ff' , minWidth: 120 , hide:true },
+                { field : 'u100dd' , minWidth: 120 , hide:true },
+                { field : 'u100ddd' , minWidth: 120 , hide:true },
+                { field : 'cape' , minWidth: 120 ,},
+                { field : 'psol' , minWidth: 120 , hide:true },
+                { field : 'ch' , minWidth: 120 ,},
+                { field : 'cm' , minWidth: 120 ,},
+                { field : 'cl' , minWidth: 120 ,},
+                { field : 'rr' , minWidth: 120 ,},
+                { field : 'rr_gn' , minWidth: 120 ,},
+                { field : 'rr_cv' , minWidth: 120 ,},
+                { field : 'rr_sn' , minWidth: 120 ,},
+                { field : 'vcty' , minWidth: 120 ,},
+                { field : 'tn' , minWidth: 120 , hide:true },
+                { field : 'tx' , minWidth: 120 , hide:true },
+                { field : 'gtn' , minWidth: 120 , hide:true },
+                { field : 'gtx' , minWidth: 120 , hide:true },
+                ],
+            },
+            ];
+            const rowData = []
+            "{% for row in data %}"
+            var line = {
+                id_ville: "{{ row.id }}",
+                ville: "{{ row.nom }}", 
+                lat: "{{ row.lat }}", 
+                lon: "{{ row.lon }}", 
+                date: "{{ row.date }}", 
+                ech: "{{ row.ech }}", 
+                t2m: "{{ row.t2m }}", 
+                hu2m: "{{ row.hu2m }}", 
+                hu10m: "{{ row.hu10m }}", 
+                hu1000hpa: "{{ row.hu1000hpa }}", 
+                hu925hpa: "{{ row.hu925hpa }}", 
+                hu850hpa: "{{ row.hu850hpa }}", 
+                hu700hpa: "{{ row.hu700hpa }}", 
+                hu500hpa: "{{ row.hu500hpa }}", 
+                hu300hpa: "{{ row.hu300hpa }}", 
+                u10ff: "{{ row.u10ff }}", 
+                u10dd: "{{ row.u10dd }}", 
+                u10ddd: "{{ row.u10ddd }}", 
+                u20ff: "{{ row.u20ff }}", 
+                u20dd: "{{ row.u20dd }}", 
+                u20ddd: "{{ row.u20ddd }}", 
+                u50ff: "{{ row.u50ff }}", 
+                u50dd: "{{ row.u50dd }}", 
+                u50ddd: "{{ row.u50ddd }}", 
+                u100ff: "{{ row.u100ff }}", 
+                u100dd: "{{ row.u100dd }}", 
+                u100ddd: "{{ row.u100ddd }}", 
+                cape: "{{ row.cape }}", 
+                psol: "{{ row.psol }}", 
+                ch: "{{ row.ch }}", 
+                cm: "{{ row.cm }}", 
+                cl: "{{ row.cl }}", 
+                rr: "{{ row.rr }}", 
+                rr_gn: "{{ row.rr_gn }}", 
+                rr_cv: "{{ row.rr_cv }}", 
+                rr_sn: "{{ row.rr_sn }}",
+                vcty: "{{ row.vcty }}", 
+                tn: "{{ row.tn }}", 
+                tx: "{{ row.tx }}", 
+                gtn: "{{ row.gtn }}", 
+                gtx: "{{ row.gtx }}",
+            }
+            rowData.push(line)
+            "{% endfor %}"
+
+            const AG_GRID_LOCALE_EN = {
+                // Set Filter
+                selectAll: 'Tout sélectionner',
+                columns: 'Colonnes',
+                filters: 'Filtres',
+                ariaSearch: 'Chercher',
+                searchOoo: 'Chercher...',
+                filterOoo: 'Filtre...',
+                lessThan: 'Inférieure a',
+                greaterThan: 'Supérieur a ',
+                lessThanOrEqual: 'Inférieure ou égal',
+                greaterThanOrEqual: 'Supérieur ou égal',
+                inRange: 'Dans l\'intervalle',
+                equals: 'Égale',
+                notEqual: 'Inégal',
+                blank: 'Vide',
+                notBlank: 'Non vide',
+                dateFormatOoo: 'yyyy-mm-dd',
+                andCondition: 'ET',
+                orCondition: 'OU',
+            }
+            var AG_GRID_LOCALE_ZZZ = {};
+            // Create a dummy locale based on english but prefix everything with zzz
+            Object.keys(AG_GRID_LOCALE_EN).forEach(function (key) {
+            if (key === 'thousandSeparator' || key === 'decimalSeparator') {
+                return;
+            }
+            AG_GRID_LOCALE_ZZZ[key] = AG_GRID_LOCALE_EN[key];
+            });
+            var localeText = AG_GRID_LOCALE_ZZZ;
+
+            const gridOptions = {
+            rowData: rowData,
+            columnDefs: columnDefs,
+            rowSelection: 'multiple',
+            suppressRowClickSelection: true,
+            defaultColDef: {
+                editable: false,
+                hide:false,
+                sortable: false,
+                minWidth: 100,
+                filter: false,
+                resizable: true,
+                floatingFilter: false,
+                flex: 1,
+            },
+            sideBar: {
+                toolPanels: [
+                {
+                    id: 'columns',
+                    labelDefault: 'Columns',
+                    labelKey: 'columns',
+                    iconKey: 'columns',
+                    toolPanel: 'agColumnsToolPanel',
+                    toolPanelParams: {
+                    suppressRowGroups: true,
+                    suppressValues: true,
+                    suppressPivots: true,
+                    suppressPivotMode: true,
+                    },
+                },
+                'filters'
+                ],
+            },
+            localeText: localeText,
+            };
+            
+            // setup the grid after the page has finished loading
+            document.addEventListener('DOMContentLoaded', function () {
+                var gridDiv = document.querySelector('#myGrid');
+                new agGrid.Grid(gridDiv, gridOptions);
+                $('#uploader').hide()
+                $('#csvviewer').show()
+
+                var URL = "{% url 'upload' %}"
+                function upl_save(){
+                    Swal.fire({
+                        title: 'Attention',
+                        text: "Voulez-vous vraiment enregistrer?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        cancelButtonText: 'Annuler',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'confirmer'
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url : URL,
+                                dataType: 'json',
+                                data : {
+                                    csrfmiddlewaretoken : '{{ csrf_token }}',
+                                    message :  'save',
+                                    savedata :  JSON.stringify(gridOptions.rowData),
+                                },
+                                method : 'POST',
+                                beforeSend: function() {
+                                    $('.preloader').show();
+                                },
+                                complete: function(){
+                                    $('.preloader').hide();
+                                },
+                                success: save_true
+                            });
+                        }
+                    })
+                }
+                function save_true(){
+                    gridOptions.api.setColumnDefs(columnDefs);
+                    Swal.fire({
+                        title: "Succès",
+                        text: "Vous pouvez consulter la page  'table'  pour voir tout l'historique des observation",
+                        icon: "success",
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Terminer'
+                    }).then((result) => {
+                        window.location.href = "{% url 'upload' %}"
+                    })
+                }
+                function upl_cancel(){
+                    Swal.fire({
+                        title: 'Attention',
+                        text: "Si vous quitter aucun observation ne sera enregistré",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        cancelButtonText: 'Annuler',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'confirmer'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "{% url 'upload' %}"
+                            }
+                        })
+                }
+                
+                $("#Saveupload").click(upl_save)
+                $("#cancelupload").click(upl_cancel)
+            });
+
+	</script>
+    {% endif %}
+{% endblock javascripts %}

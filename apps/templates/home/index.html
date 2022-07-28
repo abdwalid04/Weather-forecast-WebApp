@@ -1,0 +1,140 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Accueil {% endblock %} 
+
+{% block content %}
+
+  <div class="my-3 my-md-5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-14 col-sm-12 col-lg-12">
+            <div class="card text-center">
+              <div class="card-body" style="padding: 10px;">
+                <canvas id="tpChart" width="400" height="120"></canvas>
+              </div>
+            </div>
+          </div>
+      </div>
+        <div class="row align-items-center">
+          <div class="col-14 col-sm-12 col-lg-12">
+            <div class="card text-center">
+              <div class="card-body" style="padding: 10px;">
+                <canvas id="tminmaxChart" width="400" height="120"></canvas>
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
+
+  
+
+
+{% endblock content %}
+<!-- <style>
+  .dd{
+    color: #11477e5c;
+  }
+</style> -->
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+    integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+></script>
+<script>
+    const tminmaxctx = document.getElementById('tminmaxChart').getContext('2d');
+    const tpctx = document.getElementById('tpChart').getContext('2d');
+    function gettminmaxparm(){
+      label = []
+      tmax = []
+      tmin = []
+      "{% for row in tminmax %}"
+        date = new Date("{{ row.date }}")
+        label.push(moment(date).format('YYYY-MM-DD'))
+        tmax.push("{{ row.tx }}")
+        tmin.push("{{ row.tn }}")
+      "{% endfor %}"
+      return [label,tmax,tmin]
+    }
+    function gettpparm(){
+      label = []
+      t = []
+      p = []
+      "{% for row in data_t %}"
+        date = new Date("{{ row.date }}")
+        label.push(moment(date).format('YYYY-MM-DD'))
+        t.push("{{ row.t2m }}")
+      "{% endfor %}"
+      "{% for row in data_p %}"
+        p.push("{{ row.rr }}")
+      "{% endfor %}"
+      return [label,t,p]
+    }
+    const tminmaxChart = new Chart(tminmaxctx, {
+        data: {
+          labels: gettminmaxparm()[0],
+          datasets: [{
+            type: 'line',
+            label: 'Température maximale',
+            data: gettminmaxparm()[1],
+            fill: false,
+            borderColor: '#DA1212',
+            tension: 0.2
+          },
+          {
+            type: 'line',
+            label: 'Température minimale',
+            data: gettminmaxparm()[2],
+            fill: false,
+            borderColor:'#11487e',
+            tension: 0.2
+          },
+          ]
+        },
+    });
+    const tpChart = new Chart(tpctx, {
+        data: {
+          labels: gettpparm()[0],
+          datasets: [
+          {
+            type: 'bar',
+            label: 'Précipitation',
+            yAxisID: 'B',
+            data: gettpparm()[2],
+            fill: true,
+            backgroundColor:'#11487e',
+            tension: 0.2
+          },  
+          {
+            type: 'line',
+            label: 'Température',
+            yAxisID: 'A',
+            data: gettpparm()[1],
+            fill: false,
+            borderColor: '#DA1212',
+          },
+          ]
+        },
+        options: {
+          scales: {
+            A: {
+              type: 'linear',
+              position: 'left',
+            }, 
+            B: {
+              id: 'B',
+              type: 'linear',
+              position: 'right',
+            }
+          }
+        }
+    });
+</script>
+
+
+{% endblock javascripts %}
